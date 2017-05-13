@@ -29,7 +29,7 @@ var cxxfl = flag.Bool("cxx", false, "Use C++ standard library instead")
 
 func main() {
 	flag.Parse()
-	if flag.NArg()==0 {os.Exit(1)}
+	if flag.NArg()==0 {panic(1)}//os.exit(1) is okay but you don't write that everywhere
 	//sbuf:=flag.Args()
 	//if *hexfl{//undone hexfl
 	//}
@@ -38,7 +38,7 @@ func main() {
 		cstr := C.CString(flag.Arg(0))
 		defer C.free(unsafe.Pointer(cstr))
 		if 0!=C.cxxinit(cstr){
-			os.Exit(1)
+			panic(1)
 		}
 		err:=filepath.Walk(".",func(path string, info os.FileInfo, err error)error{
 			if info.Mode().IsRegular(){
@@ -53,13 +53,13 @@ func main() {
 				case 1:
 					fmt.Println(path)
 				default:
-					os.Exit(1)//? is it okay to exit here?
+					panic(1)//? is it okay to exit here?
 				}
 			}
 			return nil
 		})
 		if err!=nil{
-			os.Exit(1)
+			panic(1)
 		}
 	}else{
 		re:=regexp.MustCompile(flag.Arg(0))
@@ -79,7 +79,7 @@ func main() {
 			return nil
 		})
 		if err!=nil{
-			os.Exit(1)
+			panic(1)
 		}
 	}
 }
